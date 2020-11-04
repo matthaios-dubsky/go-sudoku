@@ -4,10 +4,6 @@ import (
 	"fmt"
 )
 
-func printSlice(s []int) {
-	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
-}
-
 func getPanel(grid [][]int, r, c int) []int {
 	if r > 2 || c > 2 {
 		return nil
@@ -45,7 +41,7 @@ func solve(grid [][]int) [][]int {
 						grid[i][j] = n
 						out := solve(grid)
 						if out != nil {
-							return grid
+							return grid // exit / termination condition
 						}
 						grid[i][j] = 0
 					}
@@ -66,8 +62,6 @@ func contains(s []int, n int) bool {
 	return false
 }
 
-// TODO:
-// Note: this wil lbe very similar to finding a zero square
 func validInput(grid [][]int, r, c, n int) bool {
 	if r > 9 || c > 9 {
 		return false
@@ -78,6 +72,17 @@ func validInput(grid [][]int, r, c, n int) bool {
 	}
 
 	return !(contains(grid[r], n) || contains(getCol(grid, c), n) || contains(getPanel(grid, r, c), n))
+}
+
+func printGrid(grid [][]int) {
+	fmt.Println("\nGrid:\n")
+	for i, x := range grid {
+		fmt.Printf("%d %d %d | %d %d %d | %d %d %d\n", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8])
+		if (i+1)%3 == 0 && i != 8 {
+			fmt.Println("------+-------+------")
+		}
+	}
+	fmt.Println("")
 }
 
 func main() {
@@ -92,10 +97,6 @@ func main() {
 		{8, 9, 1, 2, 3, 4, 5, 6, 7},
 		{9, 1, 2, 3, 4, 5, 6, 7, 8},
 	}
-	// fmt.Println(inputGrid[0][0:3])
-	fmt.Println(getPanel(inputGrid, 2, 0))
-	fmt.Println(getCol(inputGrid, 2))
-	fmt.Println(validInput(inputGrid, 0, 0, 1))
 	out := solve(inputGrid)
-	fmt.Println(out)
+	printGrid(out)
 }
