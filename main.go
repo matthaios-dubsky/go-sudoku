@@ -5,34 +5,25 @@ import (
 )
 
 func getPanel(grid [][]int, r, c int) []int {
-	if r > 2 || c > 2 {
-		return nil
-	}
-
+	rr := r / 3
+	cc := c / 3
 	out := make([]int, 0, 9)
-	for _, x := range grid[r*3 : r*3+3] {
-		out = append(out, x[c*3:c*3+3]...)
+	for _, x := range grid[rr*3 : rr*3+3] {
+		out = append(out, x[cc*3:cc*3+3]...)
 	}
-
 	return out
 }
 
 func getCol(grid [][]int, c int) []int {
-	if c > 9 {
-		return nil
-	}
-
 	out := make([]int, 0, 9)
 	for _, x := range grid {
 		out = append(out, x[c])
 	}
-
 	return out
 }
 
 // solve the sudoku with backtracking algorithm
 func solve(grid [][]int) [][]int {
-	// out := make([][]int)
 	for i, x := range grid {
 		for j, y := range x {
 			if y == 0 {
@@ -63,14 +54,6 @@ func contains(s []int, n int) bool {
 }
 
 func validInput(grid [][]int, r, c, n int) bool {
-	if r > 9 || c > 9 {
-		return false
-	}
-
-	if n > 9 || n < 1 {
-		return false
-	}
-
 	return !(contains(grid[r], n) || contains(getCol(grid, c), n) || contains(getPanel(grid, r, c), n))
 }
 
@@ -86,17 +69,20 @@ func printGrid(grid [][]int) {
 }
 
 func main() {
+
+	// Ref: https://dingo.sbs.arizona.edu/~sandiway/sudoku/examples.html
 	inputGrid := [][]int{
-		{0, 2, 3, 4, 5, 6, 7, 8, 9},
-		{2, 0, 4, 5, 6, 7, 8, 9, 1},
-		{3, 4, 5, 6, 7, 8, 9, 1, 2},
-		{4, 5, 6, 7, 8, 9, 1, 2, 3},
-		{5, 6, 7, 8, 9, 1, 2, 3, 4},
-		{6, 7, 8, 9, 1, 2, 3, 4, 5},
-		{7, 8, 9, 1, 2, 3, 4, 5, 6},
-		{8, 9, 1, 2, 3, 4, 5, 6, 7},
-		{9, 1, 2, 3, 4, 5, 6, 7, 8},
+		{0, 0, 0, 2, 6, 0, 7, 0, 1},
+		{6, 8, 0, 0, 7, 0, 0, 9, 0},
+		{1, 9, 0, 0, 0, 4, 5, 0, 0},
+		{8, 2, 0, 1, 0, 0, 0, 4, 0},
+		{0, 0, 4, 6, 0, 2, 9, 0, 0},
+		{0, 5, 0, 0, 0, 3, 0, 2, 8},
+		{0, 0, 9, 3, 0, 0, 0, 7, 4},
+		{0, 4, 0, 0, 5, 0, 0, 3, 6},
+		{7, 0, 3, 0, 1, 8, 0, 0, 0},
 	}
+	printGrid(inputGrid)
 	out := solve(inputGrid)
 	printGrid(out)
 }
